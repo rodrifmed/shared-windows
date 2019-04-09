@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { CustomerValidationState } from '../store/customer-validation/customer-validation.state';
 import { Store, select } from '@ngrx/store';
 import { Open, Cancel, Accept, Refuse } from '../store/customer-validation/customer-validation.action';
 import { Observable } from 'rxjs';
+import { CustomerValidationState } from '../store/customer-validation/customer-validation.reducer';
+import { tap } from 'rxjs/operators';
 
 @Component({
     selector: 'app-customer',
@@ -13,11 +14,11 @@ import { Observable } from 'rxjs';
         <div *ngIf="customerValidation$ | async as customerValidation">
             <div *ngIf="customerValidation.send">
                 <h1>Get POS is asking for your answer</h1>
-                <button (click)="accept()" >Accpet</button>
+                <button (click)="accept()" >Accept</button>
                 <button (click)="refuse()" >Refuse</button>
             </div>
             <div *ngIf="customerValidation.cancelled || customerValidation.accepted || customerValidation.denied">
-                {{customerValidation.description}}
+                {{customerValidation.payload.description}}
             </div>
         </div>
     `
@@ -27,7 +28,7 @@ export class CustomerComponent {
     customerValidation$: Observable<CustomerValidationState>;
 
     constructor(private store: Store<CustomerValidationState>) {
-        this.customerValidation$ = store.pipe(select('customerValidation'));
+        this.customerValidation$ = store.pipe(select('customerValidation'),tap(console.log));
     }
 
     accept() {

@@ -4,8 +4,19 @@ import { PosComponent } from './components/pos.component';
 import { CustomerComponent } from './components/customer.component';
 
 const routes: Routes = [
-  { path: 'pos', component: PosComponent },
-  { path: 'customer', component: CustomerComponent }
+  {
+    path: '',
+    redirectTo: '/pos',
+    pathMatch: 'full',
+  },
+  { 
+    path: 'pos', 
+    component: PosComponent 
+  },
+  { 
+    path: 'customer', 
+    component: CustomerComponent 
+  }
 ];
 
 @NgModule({

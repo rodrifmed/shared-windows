@@ -3,17 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StoreModule, ActionReducerMap, ActionReducer, MetaReducer } from '@ngrx/store';
-import { customerValidationReducer } from './store/customer-validation/customer-validation.reduce';
+import { StoreModule } from '@ngrx/store';
+import { } from './store/customer-validation/customer-validation.reducer';
 import { CustomerComponent } from './components/customer.component';
 import { PosComponent } from './components/pos.component';
 
-import { localStorageSync } from 'ngrx-store-localstorage';
-
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({ keys: ['customerValidation'] })(reducer);
-}
-const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+import { EffectsModule } from '@ngrx/effects';
+import { CustomerValidationEffects } from './store/customer-validation/customer-validation.effects';
+import { reducers, metaReducers } from './store/reducers';
 
 @NgModule({
   declarations: [
@@ -24,7 +21,8 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
   imports: [
     BrowserModule,
     AppRoutingModule,
-    StoreModule.forRoot({ customerValidation: customerValidationReducer }, { metaReducers })
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot([CustomerValidationEffects])
   ],
   providers: [],
   bootstrap: [AppComponent]
